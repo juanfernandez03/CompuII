@@ -8,9 +8,12 @@
 		int PORT ;
 		char ROOT[256];
 	} datos; 
+
+
 	
 	void http_worker(int sd_conn,void *addr);
+	char *command(char *com);
 	int largo(char * arch_pedido);
 	datos d_con;
-
+	
 #endif

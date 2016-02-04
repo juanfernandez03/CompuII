@@ -42,10 +42,15 @@ int main(int argc, char * const *argv){
 	}
 	listen(sd,CONCUR); 		//"n" incoming connections (backlog)
 	signal(SIGCHLD,SIG_IGN);
+	FILE *fpw;
+		fpw = fopen("/home/jpfernandez/Escritorio/Compu/www/log.txt", "w+");
+		fprintf(fpw, "false\n");
 
+   		fclose(fpw);
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
+
 				http_worker(sd_conn, (struct sockaddr *) &cli_addr);
 				return 0;
 			case -1: // error
