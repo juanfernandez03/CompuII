@@ -1,61 +1,70 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <stdlib.h>
-#include <string.h>
-#include <signal.h>
 
 #include "http_worker.h"
 
 int main(int argc, char * const *argv){
-	int sd, sd_conn,opc=0;
-	int opt = 1, optlen = sizeof(opt); 
 	socklen_t addrlen;
-	struct sockaddr_in srv_addr;
 	struct sockaddr_in cli_addr;
-	//printf("argc %c \n",argc);
-	//printf("argv %c \n",argv[2]);
-    /* TODO: agregar creación y configuración del socket */
-	if((opc=getopt(argc,argv,"d:"))!=0 && argc==3){
-		strncpy(d_con.ROOT,argv[2],strlen(argv[2]));			
-	}else{	
-		strncpy(d_con.ROOT,"www/",4);			
-	}
-	printf("Mi directorio ROOOT es: %s\n",d_con.ROOT);
-	d_con.PORT=8081;	
+	int sd, sd_conn;
+	//int opt = 1, optlen = sizeof(opt); 
+	int opcion = 4;
+	int protocolo = 0;
+		while ((opcion = getopt (argc, argv, "46")) >= 0){
+		switch (opcion){
 	
-	sd = socket(PF_INET, SOCK_STREAM,0);		 //creo el socket
-	setsockopt(sd,SOL_SOCKET,SO_REUSEADDR,&opt,optlen); //to avoid "Address already in use"(EADDRINUSE)
-	
-	memset (&srv_addr,0,sizeof (struct sockaddr_in));//vacio la  struct
-	srv_addr.sin_family=AF_INET;		
-	srv_addr.sin_port=htons(d_con.PORT);		
-	inet_pton(AF_INET,"127.0.0.1" , &srv_addr.sin_addr.s_addr);
+			case '4': // protocolo ipv4
+				if (protocolo != 0){
+					protocolo = -1;
+				}
+				else {
+					protocolo = 4;
+				}
+				break;
 
-	//bindeo el socket a una direccion
-	if(bind (sd,(struct sockaddr *)&srv_addr, sizeof srv_addr)==-1){
-		perror("bind ()");
-		exit (EXIT_FAILURE);
+			case '6': // protocolo ipv6
+				if (protocolo != 0){
+					protocolo = -1;
+				}
+				else {
+					protocolo = 6;
+				}
+				break;
+			
+		} // cierre switch
 	}
-	listen(sd,CONCUR); 		//"n" incoming connections (backlog)
+	printf("ip: %d \n",protocolo);
+		switch (protocolo){
+		case 0:
+			sd = ipv4();
+			break;
+		case 4:
+			sd = ipv4();
+			break;
+		case 6:
+			sd = ipv6();
+			break;
+	} 
+	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
-	FILE *fpw;
-		fpw = fopen("/home/jpfernandez/Escritorio/Compu/www/log.txt", "w+");
-		fprintf(fpw, "false\n");
-
-   		fclose(fpw);
+	//char *ejemplo = "Chauuu";
+	//int error;		
+	//pthread_t idHilo;						
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
-
 				http_worker(sd_conn, (struct sockaddr *) &cli_addr);
 				return 0;
 			case -1: // error
 				break;
 			default: // padre
+			/*	error = pthread_create (&idHilo, NULL, logWrite,(void*) ejemplo);
+
+
+				if (error != 0)
+				{
+					perror ("No puedo crear thread");
+					exit (-1);
+				}
+*/
 				break;
 		}
 		close(sd_conn);
