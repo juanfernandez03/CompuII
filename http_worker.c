@@ -190,7 +190,7 @@ void http_worker(int sd_conn, void *addr){
 
                     printf("pedidoo %s \n",pedido);
                    	resp = command(pedido);
-                    printf("respuestaaaaa %s \n",resp);
+                    //printf("respuestaaaaa %s \n",resp);
                     strcat(prueba,INIT);
                     
                     strcat(prueba,resp);

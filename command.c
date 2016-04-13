@@ -1,15 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
+
 #include "http_worker.h"
 
 char *command(char * pedido)
 {
-	printf("pedido en command %s\n",pedido);
+	//printf("pedido en command %s\n",pedido);
 	char *p = NULL;
 	if(strncmp("www/cpuInfo",pedido,strlen(pedido)) == 0)
 		p = "cat /proc/cpuinfo";
@@ -32,6 +26,7 @@ char *command(char * pedido)
 	//extern FILE *open();//usar open
 	char buff[1024];
 	char buff2[1024];
+
     //ssize_t ret_in, ret_out;
 
 	//fd = open("lspci", O_RDONLY); //lscpu
@@ -64,13 +59,11 @@ char *command(char * pedido)
 
 	while(fgets(buff, sizeof(buff), in)!=NULL){
 
-		printf("buff command %s", buff);
+		//printf("buff command %s", buff);
 		strcat(buff2,buff);
 		strcat(buff2,"<li>");//utilizar <li>
 	}
 	pclose(in);
-	//close(fd);
-	//close(fd2);
 
  return buff2;
 }

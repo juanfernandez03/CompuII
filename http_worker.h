@@ -13,6 +13,11 @@
 #include <string.h>
 #include <signal.h>
 #include <pthread.h>
+#include <fcntl.h>
+#include <errno.h>
+
+
+
 	typedef struct DATOS{
 		int PORT ;
 		char ROOT[256];
@@ -30,6 +35,7 @@
 	void *logWrite(void *ip);
 	int ipv4();
 	int ipv6();
+	void hilo(char *ip);
 	int largo(char * arch_pedido);
 	datos d_con;
 	

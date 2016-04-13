@@ -8,6 +8,7 @@ int main(int argc, char * const *argv){
 	//int opt = 1, optlen = sizeof(opt); 
 	int opcion = 4;
 	int protocolo = 0;
+	char ipAddress[INET_ADDRSTRLEN];
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
 		switch (opcion){
 	
@@ -45,9 +46,8 @@ int main(int argc, char * const *argv){
 	} 
 	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
-	//char *ejemplo = "Chauuu";
-	//int error;		
-	//pthread_t idHilo;						
+	
+
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
@@ -55,16 +55,25 @@ int main(int argc, char * const *argv){
 				return 0;
 			case -1: // error
 				break;
-			default: // padre
-			/*	error = pthread_create (&idHilo, NULL, logWrite,(void*) ejemplo);
-
-
-				if (error != 0)
-				{
-					perror ("No puedo crear thread");
-					exit (-1);
+			default: // padre	
+			//jode el favicon pasa 2 veces
+			switch(protocolo) {
+				case 4: {
+					inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
+					break;
 				}
-*/
+				case 6: {
+					inet_ntop(AF_INET6, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
+					break;
+				}
+				default:
+					inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
+					break;
+			}
+			
+			//inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
+			//char *ip = inet_ntoa((struct in_addr) cli_addr.sin_addr);
+			hilo(ipAddress);			
 				break;
 		}
 		close(sd_conn);
@@ -73,3 +82,5 @@ int main(int argc, char * const *argv){
 	perror("acept ()");
 	return 0;
 }
+
+
