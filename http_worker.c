@@ -1,12 +1,4 @@
-#include <string.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
-#include <sys/msg.h>
-#include <errno.h>
 #include "http_worker.h"
 #include "func.h"
 

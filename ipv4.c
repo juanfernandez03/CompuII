@@ -16,9 +16,6 @@ int ipv4(){
 		srv_addr.sin_family=AF_INET;		
 		srv_addr.sin_port=htons(d_con.PORT);		
 		inet_pton(AF_INET,"127.0.0.1" , &srv_addr.sin_addr.s_addr);
-
-	
-
 		//bindeo el socket a una direccion
 		if(bind (sd,(struct sockaddr *)&srv_addr, sizeof srv_addr)==-1){
 			perror("bind ()");

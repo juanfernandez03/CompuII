@@ -10,8 +10,7 @@ int main(int argc, char * const *argv){
 	int protocolo = 0;
 	char ipAddress[INET_ADDRSTRLEN];
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
-		switch (opcion){
-	
+		switch (opcion){	
 			case '4': // protocolo ipv4
 				if (protocolo != 0){
 					protocolo = -1;
@@ -20,7 +19,6 @@ int main(int argc, char * const *argv){
 					protocolo = 4;
 				}
 				break;
-
 			case '6': // protocolo ipv6
 				if (protocolo != 0){
 					protocolo = -1;
@@ -28,10 +26,9 @@ int main(int argc, char * const *argv){
 				else {
 					protocolo = 6;
 				}
-				break;
-			
+				break;			
 		} // cierre switch
-	}
+	} 
 	printf("ip: %d \n",protocolo);
 		switch (protocolo){
 		case 0:
@@ -47,7 +44,6 @@ int main(int argc, char * const *argv){
 	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
 	
-
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo

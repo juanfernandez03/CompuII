@@ -15,7 +15,8 @@
 #include <pthread.h>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <sys/stat.h>
+#include <sys/msg.h>
 
 
 	typedef struct DATOS{
