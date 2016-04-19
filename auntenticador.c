@@ -29,12 +29,14 @@ main()
 	if (Clave1 == (key_t)-1)
 	{
 		printf("Error al obtener clave para cola mensajes");
+		return;
 	}
 	
 	Id_Cola_Mensajes = msgget (Clave1, 0600 | IPC_CREAT);
 	if (Id_Cola_Mensajes == -1)
 	{
-		printf("Error al obtener identificador para cola mensajes");		
+		printf("Error al obtener identificador para cola mensajes");	
+		return;	
 	}
 	
 	while(msgrcv (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje),1, 0) > 0)
@@ -47,6 +49,7 @@ main()
 			r = "false";
 		Un_Mensaje.Id_Mensaje = 2;
 		Un_Mensaje.Pid = Un_Mensaje.Pid;   	
+		//Un_Mensaje.Pid = 13;
 		strcpy (Un_Mensaje.Mensaje,r);
 		msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje), IPC_NOWAIT);
 	}
@@ -68,14 +71,14 @@ char buff[1024];
 	{
 	 	printf("error fd \n" );
 	 	perror ("open");
-      //return 2;
+      return;
       }
 while((ret_in = read (fd, buff,sizeof(buff))) > 0)
 	{
 		int i = 0;
 
 		i++;
-    	printf("user y pass que llego %s y buff %s \n",up,buff);
+    	printf("user y pass que llego %s  \n",up);
     	token =strtok(buff,"-");
     	 while( token != NULL ) 
    		{

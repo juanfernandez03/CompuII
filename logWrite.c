@@ -16,22 +16,23 @@ void *logWrite (void *parametro)
 	if (Clave1 == (key_t)-1)
 	{
 		printf("Error al obtener clave para cola mensajes");
-	}
-	
+		exit(0);
+	}	
 	idCola = msgget (Clave1, 0600 | IPC_CREAT);
 	if (idCola == -1)
 	{
-				printf("Error al obtener identificador para cola mensajes");		
+		printf("Error al obtener identificador para cola mensajes");
+		exit(0);
 	}
 	while(msgrcv (idCola, (struct msgbuf *)&Un_Mensaje, sizeof(Un_Mensaje.Mensaje),1, 0) > 0)
 	{	
-
 	char *log = " es la nueva ip que se conecto \n";
     char logCom[41] = {0}; //(char*)parametro;
     int input_fd;    /* Input and output file descriptors */
     input_fd = open ("/home/jpfernandez/Escritorio/Compu/www/log.txt",  O_WRONLY | O_APPEND);
     if (input_fd == -1) {
-      perror ("open");
+		perror ("open");
+		exit(0);
     }
     strcat(logCom,Un_Mensaje.Mensaje);
     strcat(logCom,log);

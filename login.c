@@ -7,6 +7,7 @@ char *InitLogin(char *userTmp,char *passTmp)
 	key_t Clave1;
 	int Id_Cola_Mensajes;
 	msj Un_Mensaje;
+	int i = 0;
 	printf("Antes de la cola de mensaje, : PID %d \n" , getpid ());
 	int pid = getpid (); 
    	Clave1 = ftok ("/bin/ls", 33);
@@ -18,7 +19,7 @@ char *InitLogin(char *userTmp,char *passTmp)
 	if (Id_Cola_Mensajes == -1)
 	{
 		printf("Error al obtener identificar para la cola de mensajes");	
-		return -1;			
+		exit(0);
 	}			
 	strcat(userPass,userTmp);
 	strcat(userPass,"|");
@@ -26,16 +27,17 @@ char *InitLogin(char *userTmp,char *passTmp)
 	Un_Mensaje.Id_Mensaje = 1;  
 	Un_Mensaje.Pid = pid;   
 	strcpy (Un_Mensaje.Mensaje, userPass);    
-
 	msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje),IPC_NOWAIT);
 	msgrcv (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje),2, 0);
-	
-	if(pid != Un_Mensaje.Pid)	
+	while(pid != Un_Mensaje.Pid)	
 	{
-				printf("Pd: %d \n",pid);                         
-		//Un_Mensaje.Id_Mensaje = 2;
+		i++;
+		printf("Pd: %d \n",pid);                         
+		Un_Mensaje.Id_Mensaje = 2;
 		printf("En el while mensaje: %d \n",Un_Mensaje.Pid);              
-		//msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje), IPC_NOWAIT);		        
+		msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje), IPC_NOWAIT);		  
+		if(i>10)
+		return "false";      
 	}
 
 	printf("paso el while mensaje: %s \n",Un_Mensaje.Mensaje);              

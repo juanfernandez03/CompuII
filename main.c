@@ -5,7 +5,6 @@ int main(int argc, char * const *argv){
 	socklen_t addrlen;
 	struct sockaddr_in cli_addr;
 	int sd, sd_conn;
-	//int opt = 1, optlen = sizeof(opt); 
 	int opcion = 4;
 	int protocolo = 0;
 	char ipAddress[INET_ADDRSTRLEN];
@@ -53,13 +52,15 @@ int main(int argc, char * const *argv){
 	Clave1 = ftok ("/bin/ls", 30);
 	if (Clave1 == (key_t)-1)
 	{
-		printf("Error al obtener clave para cola mensajes");				
+		printf("Error al obtener clave para cola mensajes");	
+		return -1;			
 	}		
 	idCola = msgget (Clave1, 0600 | IPC_CREAT);
 
 	if (idCola == -1)
 	{
-		printf("Error al obtener identificar para la cola de mensajes");				
+		printf("Error al obtener identificar para la cola de mensajes");		
+		return -1;					
 	}
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
