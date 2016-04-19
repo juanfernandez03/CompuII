@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include "func.h"
 int vericador(char *up);
 
 typedef struct Mi_Tipo_Mensaje
@@ -66,7 +67,7 @@ ssize_t ret_in;
 char buff[1024];
    char *token;
 
-	fd = open("/home/jpfernandez/Escritorio/Compu/www/user.txt", O_RDONLY);
+	fd = open(DIRUSER, O_RDONLY);
 	if(fd < 0)
 	{
 	 	printf("error fd \n" );
