@@ -9,8 +9,12 @@ int main(int argc, char * const *argv){
 	int opcion = 4;
 	int protocolo = 0;
 	char ipAddress[INET_ADDRSTRLEN];
+	key_t Clave1;
+	int idCola;
+	mensa Un_Mensaje;
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
-		switch (opcion){	
+		switch (opcion){
+	
 			case '4': // protocolo ipv4
 				if (protocolo != 0){
 					protocolo = -1;
@@ -19,6 +23,7 @@ int main(int argc, char * const *argv){
 					protocolo = 4;
 				}
 				break;
+
 			case '6': // protocolo ipv6
 				if (protocolo != 0){
 					protocolo = -1;
@@ -26,9 +31,10 @@ int main(int argc, char * const *argv){
 				else {
 					protocolo = 6;
 				}
-				break;			
+				break;
+			
 		} // cierre switch
-	} 
+	}
 	printf("ip: %d \n",protocolo);
 		switch (protocolo){
 		case 0:
@@ -43,7 +49,18 @@ int main(int argc, char * const *argv){
 	} 
 	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
-	
+	hilo(ipAddress);			
+	Clave1 = ftok ("/bin/ls", 30);
+	if (Clave1 == (key_t)-1)
+	{
+		printf("Error al obtener clave para cola mensajes");				
+	}		
+	idCola = msgget (Clave1, 0600 | IPC_CREAT);
+
+	if (idCola == -1)
+	{
+		printf("Error al obtener identificar para la cola de mensajes");				
+	}
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
@@ -66,10 +83,10 @@ int main(int argc, char * const *argv){
 					inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
 					break;
 			}
-			
-			//inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
-			//char *ip = inet_ntoa((struct in_addr) cli_addr.sin_addr);
-			hilo(ipAddress);			
+			Un_Mensaje.Id_Mensaje = 1;             
+			strcpy (Un_Mensaje.Mensaje, ipAddress);             
+			msgsnd (idCola, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Mensaje),IPC_NOWAIT);
+
 				break;
 		}
 		close(sd_conn);

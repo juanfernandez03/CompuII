@@ -11,6 +11,7 @@ int vericador(char *up);
 typedef struct Mi_Tipo_Mensaje
 	{
 		long Id_Mensaje;
+		int Pid;
 		char Mensaje[100];
 	} msj;
 main()
@@ -36,16 +37,18 @@ main()
 		printf("Error al obtener identificador para cola mensajes");		
 	}
 	
-	while(msgrcv (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje, sizeof(Un_Mensaje.Mensaje),1, 0) > 0)
+	while(msgrcv (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje),1, 0) > 0)
 	{	
+		printf("En el while autenticador: %d el pid del autenticador %d \n",Un_Mensaje.Pid,getpid ());              
 		result = verificador(Un_Mensaje.Mensaje);
 		if(result == 1)
 			r = "true";
 		else
 			r = "false";
-		Un_Mensaje.Id_Mensaje = 2;	
+		Un_Mensaje.Id_Mensaje = 2;
+		Un_Mensaje.Pid = Un_Mensaje.Pid;   	
 		strcpy (Un_Mensaje.Mensaje,r);
-		msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Mensaje), IPC_NOWAIT);
+		msgsnd (Id_Cola_Mensajes, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Pid)+sizeof(Un_Mensaje.Mensaje), IPC_NOWAIT);
 	}
 
 	msgctl (Id_Cola_Mensajes, IPC_RMID, (struct msqid_ds *)NULL);
@@ -70,9 +73,9 @@ char buff[1024];
 while((ret_in = read (fd, buff,sizeof(buff))) > 0)
 	{
 		int i = 0;
-		printf("i %d \n",i);
+
 		i++;
-    	printf("up %s y buff %s \n",up,buff);
+    	printf("user y pass que llego %s y buff %s \n",up,buff);
     	token =strtok(buff,"-");
     	 while( token != NULL ) 
    		{

@@ -27,9 +27,14 @@
 	typedef struct Mi_Tipo_Mensaje
 	{
 		long Id_Mensaje;
+				int Pid;
 		char Mensaje[100];
 	} msj;
-
+	typedef struct Mensaje
+	{
+		long Id_Mensaje;
+		char Mensaje[100];
+	} mensa;
 	
 	void http_worker(int sd_conn,void *addr);
 	char *command(char *com);
@@ -38,6 +43,7 @@
 	int ipv6();
 	void hilo(char *ip);
 	int largo(char * arch_pedido);
+	char *InitLogin(char *user,char *pass);
 	datos d_con;
 	
 #endif

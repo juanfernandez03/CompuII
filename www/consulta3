@@ -1,0 +1,5 @@
+hacer que solamente se dispare un hilo , puede ser con cola de mensaje
+En la cola de mensaje cuando se autentica el usuario, enviar pid y recibir pid para validar usando while
+socket afunespec
+hacer un fork execv y escribir en un txt
+usar strncat

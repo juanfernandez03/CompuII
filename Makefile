@@ -4,7 +4,7 @@ CC:=gcc
 TARGETS= server 
 
 all: clean $(TARGETS)
-server: main.c http_worker.c command.c logWrite.c ipv4.c ipv6.c hilo.c
+server: main.c http_worker.c command.c logWrite.c ipv4.c ipv6.c hilo.c login.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 .PHONY: test
