@@ -40,7 +40,7 @@ char *InitLogin(char *userTmp,char *passTmp)
 		return "false";      
 	}
 
-	printf("paso el while mensaje: %s \n",Un_Mensaje.Mensaje);              
+	printf("paso el while mensaje: %s, pid %d  \n",Un_Mensaje.Mensaje,Un_Mensaje.Pid);              
 
 return Un_Mensaje.Mensaje;
 }

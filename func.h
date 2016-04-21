@@ -21,7 +21,9 @@
 	#define FUNC1     "test.html"
 	#define INIT     "<html><body><h1><li>" 
 	#define CLOSE     "</h1></body></html>"
-	#define EMPY   "<html><body><h1>Not Implemented</h1></body></html>"
+	#define EMPTY   "<html><body><h1>Not Implemented</h1></body></html>"
+	#define DIRLOG   "/home/jpfernandez/Escritorio/Compu/www/log.txt"
+	#define DIRUSER 	"/home/jpfernandez/Escritorio/Compu/www/user.txt"
 #endif
 
 

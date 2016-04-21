@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include "http_worker.h"
+#include "func.h"
 
 void *logWrite (void *parametro)
 {
@@ -29,14 +30,14 @@ void *logWrite (void *parametro)
 	char *log = " es la nueva ip que se conecto \n";
     char logCom[41] = {0}; //(char*)parametro;
     int input_fd;    /* Input and output file descriptors */
-    input_fd = open ("/home/jpfernandez/Escritorio/Compu/www/log.txt",  O_WRONLY | O_APPEND);
+    input_fd = open (DIRLOG,  O_WRONLY | O_APPEND);
     if (input_fd == -1) {
 		perror ("open");
 		exit(0);
     }
     strcat(logCom,Un_Mensaje.Mensaje);
     strcat(logCom,log);
-    printf("Hola soy el hiloo, ip %s \n",logCom);
+    //printf("Hola soy el hiloo, ip %s \n",logCom);
      if((write (input_fd,logCom, strlen(logCom))) < 0){
         perror("ultimo write");
      }
