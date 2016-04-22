@@ -11,6 +11,8 @@ int main(int argc, char * const *argv){
 	key_t Clave1;
 	int idCola;
 	mensa Un_Mensaje;
+	if(initMemory() != 1)
+	printf("Error init memory");
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
 		switch (opcion){
 	

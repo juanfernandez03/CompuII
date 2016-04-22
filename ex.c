@@ -13,27 +13,37 @@
 #include <sys/stat.h>
 #include <sys/msg.h>
 #include <netdb.h>
+//#include "func.h"
 
 int main()
 {
+/*
 	char *argv[3] = {"Command-line", ".", NULL};//-v en el segundo -k para lspci
-	//char *prog[] = { "ls", NULL };
-	int respuesta;
-	int fd = open("/home/jpfernandez/Escritorio/Compu/www/t.txt", O_CREAT | O_TRUNC | O_RDWR, 0644);
+	int fd = open("/home/jpfernandez/Escritorio/Compu/www/ram.txt", O_CREAT | O_TRUNC | O_RDWR, 0644);
     if (fd < 0) {
         perror("open()");
         exit(EXIT_FAILURE);
     }
-    close(STDOUT_FILENO);
-
+    close(STDOUT_FILENO);   
     dup2(fd, STDOUT_FILENO);
 	pid_t pid = fork();
 	if(pid==0)
 	{
-		//execv("/home/jpfernandez/Escritorio/Compu",argv);
-		respuesta=execvp( "free", argv );//lsusb lspci df(estado del disco) free (ram)
-		//execvp("sh", "-c", "cd /tmp; pwd");
-		printf("re :%d",respuesta);
-
+		execvp( "free", argv );//lsusb lspci df(estado del disco) free (ram)
+	}			
+	*/
+	char *argv[3] = {"Command-line", ".", NULL};//-v en el segundo -k para lspci  
+    int fd2 = open("/home/jpfernandez/Escritorio/Compu/www/memory.txt", O_CREAT | O_TRUNC | O_RDWR, 0644);
+    if (fd2 < 0) {
+        perror("open()");
+        exit(EXIT_FAILURE);
+    }   
+    close(STDOUT_FILENO);
+    dup2(fd2, STDOUT_FILENO);
+	pid_t pid2 = fork();
+	if(pid2==0)
+	{
+		execvp( "df", argv );//lsusb lspci df(estado del disco) free (ram)
 	}
+	
 }

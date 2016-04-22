@@ -45,6 +45,7 @@
 	void hilo(char *ip);
 	int largo(char * arch_pedido);
 	char *InitLogin(char *user,char *pass);
+	int initMemory();
 	datos d_con;
 	
 #endif
