@@ -26,7 +26,7 @@
 	#define DIRUSER 	"/home/jpfernandez/Escritorio/Compu/www/user.txt"
 	#define DIRRAM 	"/home/jpfernandez/Escritorio/Compu/www/ram.txt"
 	#define DIRMEMORY 	"/home/jpfernandez/Escritorio/Compu/www/memory.txt"
-	
+
 #endif
 
 

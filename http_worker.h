@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdlib.h>
@@ -45,7 +46,8 @@
 	void hilo(char *ip);
 	int largo(char * arch_pedido);
 	char *InitLogin(char *user,char *pass);
-	int initMemory();
+	void initRam();
+	void initMemory();
 	datos d_con;
 	
 #endif

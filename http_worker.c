@@ -17,7 +17,7 @@ void http_worker(int sd_conn, void *addr){
     arch_pedido[255]=0;
     sscanf(buf, "%s /%s" ,metodo,arch_pedido);  
     strncpy(pedido,d_con.ROOT,strlen(d_con.ROOT));    
-    strcat(pedido, arch_pedido);
+    strncat(pedido, arch_pedido,strlen(arch_pedido));
     //completo la ruta del archivo pedido
     printf("pedido:%s \n",pedido);   
     
@@ -34,7 +34,7 @@ void http_worker(int sd_conn, void *addr){
                 strcat(login,init);               
                 if((fd_arch=open(login,O_RDONLY,0666))!=-1)
                 {
-                    strcpy(out_msj,OK_HTML);                   
+                    strncpy(out_msj,OK_HTML,strlen(OK_HTML));                   
                     write(sd_conn,out_msj, strlen(out_msj));                    
                     while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0)
                     {
@@ -71,7 +71,7 @@ void http_worker(int sd_conn, void *addr){
 						    strcat(index,lg);		            
 						    if((fd_arch2=open(index,O_RDONLY,0666))!=-1)
 						    {		                
-						        strcpy(out_msj2,OK_HTML);		                
+						        strncpy(out_msj2,OK_HTML,strlen(OK_HTML));		                
 								write(sd_conn,out_msj2, strlen(out_msj2));
 						        i++;
 						        while((n2=read(fd_arch2,buf_arch2, sizeof buf_arch2))>0)
