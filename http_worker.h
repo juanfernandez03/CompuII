@@ -21,6 +21,9 @@
 #include <netdb.h>
 
 
+
+
+
 	typedef struct DATOS{
 		int PORT ;
 		char ROOT[256];
@@ -48,6 +51,7 @@
 	char *InitLogin(char *user,char *pass);
 	void initRam();
 	void initMemory();
+	int ipvDefault();
 	datos d_con;
 	
 #endif

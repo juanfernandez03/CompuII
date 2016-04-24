@@ -1,2 +1,2 @@
 S.ficheros     blocks de 1K  Usados Disponibles Uso% Montado en
-/dev/sda1           7745680 5653280     1675888  78% /
+/dev/sda1           7745680 5696080     1633088  78% /

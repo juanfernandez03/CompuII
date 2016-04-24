@@ -39,7 +39,7 @@ int main(int argc, char * const *argv){
 	printf("ip: %d \n",protocolo);
 		switch (protocolo){
 		case 0:
-			sd = ipv4();
+			sd = ipvDefault();
 			break;
 		case 4:
 			sd = ipv4();
@@ -48,6 +48,7 @@ int main(int argc, char * const *argv){
 			sd = ipv6();
 			break;
 	} 
+	printf("sd %d \n",sd);
 	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
 	hilo(ipAddress);			

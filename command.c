@@ -28,8 +28,9 @@ char *command(char * pedido)
       }
 	while((ret_in = read (fd, buff,sizeof(buff))) > 0)
 	{
-		printf("buff : %s \n",buff);
-		strcat(buff2,buff);
+		//printf("buff : %s \n",buff);
+		strncat(buff2,buff,strlen(buff));
+
 	}
 			printf("buff2 : %s \n",buff2);
 
