@@ -78,6 +78,25 @@ void http_worker(int sd_conn, void *addr){
             }
             if((strncmp(cookie,"@11",strlen("@11"))==0))
             {
+             sscanf(pedido, "%*[^/]%*c%[^&]",url);       
+             printf("pedido en worker %s\n",pedido);                         
+             if((strncmp(pedido,"www/logOut",strlen("www/logOut")))==0)
+             {
+             	strncpy(login,d_con.ROOT,strlen(d_con.ROOT));                
+                strcat(login,init);               
+                if((fd_arch=open(login,O_RDONLY,0666))!=-1)
+                {
+                    strncpy(out_msj,OK_HTML,strlen(OK_HTML));                   
+                    write(sd_conn,out_msj, strlen(out_msj));                    
+                    while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0)
+                    {
+                        write(sd_conn,buf_arch,n);
+                        i++;                       
+                    }
+                }   
+             }
+             else
+             {
                 sscanf(pedido, "%*[^/]%*c%[^&]",url);                                
                 resp = command(pedido);
                     strncat(prueba,INIT,strlen(INIT));                 
@@ -87,6 +106,7 @@ void http_worker(int sd_conn, void *addr){
 					write(sd_conn,out_msj2, strlen(out_msj2));                    
                     write(sd_conn,prueba, strlen(prueba));
                     i++;
+              }
             }                        
             if(i == 0)
             {               

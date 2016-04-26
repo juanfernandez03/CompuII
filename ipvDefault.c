@@ -9,11 +9,13 @@ int ipvDefault(){
   memset (&hints, 0, sizeof (hints));
   hints.ai_family = PF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
-  hints.ai_flags |= AI_CANONNAME;
-
-  errcode = getaddrinfo (d_con.ROOT, NULL, &hints, &res);
+  hints.ai_flags = AI_PASSIVE; // use my IP address
+  //hints.ai_flags |= AI_CANONNAME;
+  printf("Ruta %s \n",d_con.ROOT);
+  errcode = getaddrinfo (NULL, "3490", &hints, &res);
   if (errcode != 0)
     {
+    printf("Error en el  getaddrinfo");
       perror ("getaddrinfo");
       return -1;
     }
@@ -35,9 +37,11 @@ int ipvDefault(){
           break;
         }
       inet_ntop (res->ai_family, ptr, addrstr, 100);
-      printf ("IPv%d address: %s (%s)\n", res->ai_family == PF_INET6 ? 6 : 4,
+      printf ("IPv%d direccion: %s (%s)\n", res->ai_family == PF_INET6 ? 6 : 4,
               addrstr, res->ai_canonname);
       res = res->ai_next;
+      freeaddrinfo(res);
+
     }
 
   return sd;

@@ -7,7 +7,7 @@ int ipv6 (){
 		struct sockaddr_in6 srv_addr;
 		strncpy(d_con.ROOT,"www/",4);			
 		printf("Mi directorio ROOOT es y el protocolo ipv6: %s\n",d_con.ROOT);
-		d_con.PORT=8081;	
+		d_con.PORT=3490;	
 	
 		sd = socket(AF_INET6, SOCK_STREAM,0);
 
