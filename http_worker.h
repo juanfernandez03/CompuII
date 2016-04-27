@@ -20,11 +20,16 @@
 #include <sys/msg.h>
 #include <netdb.h>
 #include <time.h>
+#include <mqueue.h>
+#include <sys/mman.h>
 
 
 
-
-
+	typedef struct Req
+	{
+	  pid_t pid;
+	  char data[4096];
+	} Req;
 
 	typedef struct DATOS{
 		int PORT ;

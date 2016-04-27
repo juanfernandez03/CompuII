@@ -13,6 +13,25 @@ int main(int argc, char * const *argv){
 	mensa Un_Mensaje;
 	initMemory();
 	initRam();
+	Req buf;
+	int n;
+	mqd_t msjcola = mq_open ("/home", O_CREAT | O_RDWR, 0666, NULL);
+	int prioridad = 1;
+	char buffer[200];
+	strncat(buffer,"holaaa",strlen("holaaa"));
+	//mqd_t handle = mq_open ("/home/jpfernandez/Escritorio/Compu/www/", O_CREAT | O_RDONLY, 0, &buf);
+	n = mq_send (msjcola, buffer, strlen(buffer), prioridad);
+
+	if(n<0)
+	{
+	         perror("mq_send");
+
+	printf("mensaje error");
+	}
+	else
+	printf("se envio %s \n",buffer);
+
+	
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
 		switch (opcion){
 	

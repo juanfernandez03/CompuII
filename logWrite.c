@@ -10,6 +10,32 @@
 
 void *logWrite (void *parametro)
 {
+	struct mq_attr atributos;
+	Req buf;
+	int n;
+		char *buffer = NULL;
+		mqd_t  msjcola = mq_open ("/home", O_RDWR, 0666, NULL);
+	mq_getattr (msjcola, &atributos);
+	buffer = malloc (atributos.mq_msgsize * sizeof (char));
+
+	unsigned int prioridad= 1;
+
+			//printf("se recibio %s \n",buffer);
+	//mqd_t handle = mq_open ("/home/jpfernandez/Escritorio/Compu/www/", O_CREAT | O_RDONLY, 0, &buf);
+	while ((mq_receive (msjcola, buffer, atributos.mq_msgsize, &prioridad)) > 0)
+	{
+		printf("se recibio %s \n",buffer);
+	}
+
+	if(n<0)
+	{
+	         perror("mq_receive");
+
+	printf("mensaje error");
+	}
+	else
+	printf("se recibio %s \n",buffer);
+
 	time_t curtime;
 
    	time(&curtime);
