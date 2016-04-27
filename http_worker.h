@@ -19,6 +19,8 @@
 #include <sys/stat.h>
 #include <sys/msg.h>
 #include <netdb.h>
+#include <time.h>
+
 
 
 
