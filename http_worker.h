@@ -24,13 +24,7 @@
 #include <sys/mman.h>
 
 
-
-	typedef struct Req
-	{
-	  pid_t pid;
-	  char data[4096];
-	} Req;
-
+	struct mq_attr atributos;
 	typedef struct DATOS{
 		int PORT ;
 		char ROOT[256];

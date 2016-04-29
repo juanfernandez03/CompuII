@@ -1,6 +1,6 @@
 
 #include "http_worker.h"
-
+#include "func.h"
 int main(int argc, char * const *argv){
 	socklen_t addrlen;
 	struct sockaddr_in cli_addr;
@@ -8,28 +8,15 @@ int main(int argc, char * const *argv){
 	int opcion = 4;
 	int protocolo = 0;
 	char ipAddress[INET_ADDRSTRLEN];
-	key_t Clave1;
-	int idCola;
-	mensa Un_Mensaje;
+
 	initMemory();
 	initRam();
-	Req buf;
+
 	int n;
-	mqd_t msjcola = mq_open ("/home", O_CREAT | O_RDWR, 0666, NULL);
+	mqd_t msjcola = mq_open (COLAMSJ, O_CREAT | O_RDWR, 0666, NULL);
 	int prioridad = 1;
 	char buffer[200];
-	strncat(buffer,"holaaa",strlen("holaaa"));
-	//mqd_t handle = mq_open ("/home/jpfernandez/Escritorio/Compu/www/", O_CREAT | O_RDONLY, 0, &buf);
-	n = mq_send (msjcola, buffer, strlen(buffer), prioridad);
-
-	if(n<0)
-	{
-	         perror("mq_send");
-
-	printf("mensaje error");
-	}
-	else
-	printf("se envio %s \n",buffer);
+	
 
 	
 		while ((opcion = getopt (argc, argv, "46")) >= 0){
@@ -71,19 +58,7 @@ int main(int argc, char * const *argv){
 	listen(sd,CONCUR); 		//"n" incoming connections 
 	signal(SIGCHLD,SIG_IGN);
 	hilo(ipAddress);			
-	Clave1 = ftok ("/bin/ls", 30);
-	if (Clave1 == (key_t)-1)
-	{
-		printf("Error al obtener clave para cola mensajes");	
-		return -1;			
-	}		
-	idCola = msgget (Clave1, 0600 | IPC_CREAT);
-
-	if (idCola == -1)
-	{
-		printf("Error al obtener identificar para la cola de mensajes");		
-		return -1;					
-	}
+	
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
@@ -106,10 +81,18 @@ int main(int argc, char * const *argv){
 					inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
 					break;
 			}
-			Un_Mensaje.Id_Mensaje = 1;             
-			strcpy (Un_Mensaje.Mensaje, ipAddress);             
-			msgsnd (idCola, (struct msgbuf *)&Un_Mensaje,sizeof(Un_Mensaje.Mensaje),IPC_NOWAIT);
+			
+			strncpy(buffer,ipAddress,strlen(ipAddress));
+			n = mq_send (msjcola, buffer, strlen(buffer), prioridad);
 
+			if(n<0)
+			{
+				perror("mq_send");
+				return -1;					
+			}
+			else
+				printf("se envio %s \n",buffer);
+			
 				break;
 		}
 		close(sd_conn);

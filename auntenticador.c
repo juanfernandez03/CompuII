@@ -1,25 +1,16 @@
-
-#include <string.h>
-#include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
-#include <sys/msg.h>
-#include <errno.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
-#include <fcntl.h>
+#include <errno.h>
+#include <mqueue.h>
 #include "func.h"
 int vericador(char *up);
-
-typedef struct Mi_Tipo_Mensaje
-	{
-		long Id_Mensaje;
-		int Pid;
-		char Mensaje[100];
-	} msj;
-main()
+	struct mq_attr atributos; 
+	main()
 {
-	key_t Clave1;
-	int Id_Cola_Mensajes;
-	msj Un_Mensaje;
+	/*
 	
 	int result = 0;
 	char *r = NULL;
@@ -56,6 +47,41 @@ main()
 	}
 
 	msgctl (Id_Cola_Mensajes, IPC_RMID, (struct msqid_ds *)NULL);
+	*/
+	int result = 0;
+	char *r = NULL;
+	char *buffer = NULL;
+	char *envio = NULL;
+	mqd_t  msjcola = mq_open (COLAMSJ2, O_RDWR, 0666, NULL);
+	mqd_t msjEnvio = mq_open (COLAMSJ3, O_CREAT | O_RDWR, 0666, NULL);
+	mq_getattr (msjcola, &atributos);
+	buffer = malloc (atributos.mq_msgsize * sizeof (char));
+	unsigned int prioridad= 1;
+	int pri = 1;
+	int n;
+	printf("NUEVA COLA \n");        
+	if((mq_receive (msjcola, buffer, atributos.mq_msgsize, &prioridad)<0))      
+	{
+		perror("mq_receive");
+	}
+	while ((mq_receive (msjcola, buffer, atributos.mq_msgsize, &prioridad)) > 0)
+	{
+		printf("NUEVA COLA En el while autenticador: %s  \n",buffer);              
+		result = verificador(buffer);
+		if(result == 1)
+			r = "true";
+		else
+			r = "false";
+			//strncpy(envio,r,strlen(r));
+			n = mq_send (msjEnvio, r, strlen(r), pri);
+			if(n<0)
+			{
+				perror("mq_send");
+				return -1;					
+			}
+			else
+				printf("se envio resultado %s \n",r);    
+			}
 
 }
 
@@ -100,3 +126,4 @@ while((ret_in = read (fd, buff,sizeof(buff))) > 0)
     }
 return re;
 }
+

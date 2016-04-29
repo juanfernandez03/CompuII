@@ -4,7 +4,8 @@
 char *InitLogin(char *userTmp,char *passTmp)
 {
 	char userPass[1024] = {0};
-	key_t Clave1;
+	/*
+	 key_t Clave1;
 	int Id_Cola_Mensajes;
 	msj Un_Mensaje;
 	int i = 0;
@@ -21,9 +22,7 @@ char *InitLogin(char *userTmp,char *passTmp)
 		printf("Error al obtener identificar para la cola de mensajes");	
 		exit(0);
 	}			
-	strcat(userPass,userTmp);
-	strcat(userPass,"|");
-	strcat(userPass,passTmp);						
+							
 	Un_Mensaje.Id_Mensaje = 1;  
 	Un_Mensaje.Pid = pid;   
 	strcpy (Un_Mensaje.Mensaje, userPass);    
@@ -40,7 +39,32 @@ char *InitLogin(char *userTmp,char *passTmp)
 		return "false";      
 	}
 
-	printf("paso el while mensaje: %s, pid %d  \n",Un_Mensaje.Mensaje,Un_Mensaje.Pid);              
+	printf("paso el while mensaje: %s, pid %d  \n",Un_Mensaje.Mensaje,Un_Mensaje.Pid);   
+	*/
+	int n;
+	mqd_t msjcola = mq_open (COLAMSJ2, O_CREAT | O_RDWR, 0666, NULL);
+	mqd_t  msjvuelta = mq_open (COLAMSJ3, O_RDWR, 0666, NULL);
+	int prioridad = 1;
+	unsigned int pri = 1;
+	char buffer[200];
+	char volvio[200];
+	strcat(userPass,userTmp);
+	strcat(userPass,"|");
+	strcat(userPass,passTmp);
+	strncpy(buffer,userPass,strlen(userPass));
+	n = mq_send (msjcola, buffer, strlen(buffer), prioridad);
 
-return Un_Mensaje.Mensaje;
+	if(n<0)
+	{
+		perror("mq_send");
+		return -1;					
+	}
+	else
+		printf("se envio %s \n",buffer); 
+	while ((mq_receive (msjvuelta, volvio, atributos.mq_msgsize, &pri)) > 0)
+	{
+		printf("VOLVIO DEL LOGIN: %s  \n",volvio);              
+	}          
+
+return buffer;
 }

@@ -26,7 +26,9 @@
 	#define DIRUSER 	"/home/jpfernandez/Escritorio/Compu/www/user.txt"
 	#define DIRRAM 	"/home/jpfernandez/Escritorio/Compu/www/ram.txt"
 	#define DIRMEMORY 	"/home/jpfernandez/Escritorio/Compu/www/memory.txt"
-
+	#define COLAMSJ 	"/home"
+	#define COLAMSJ2 	"/bin"
+	#define COLAMSJ3 	"/tmp"
 #endif
 
 
