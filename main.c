@@ -9,8 +9,7 @@ int main(int argc, char * const *argv){
 	int protocolo = 0;
 	char ipAddress[INET_ADDRSTRLEN];
 
-	initMemory();
-	initRam();
+	
 
 	int n;
 	mqd_t msjcola = mq_open (COLAMSJ, O_CREAT | O_RDWR, 0666, NULL);
@@ -62,6 +61,8 @@ int main(int argc, char * const *argv){
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
+				initMemory();
+				initRam();
 				http_worker(sd_conn, (struct sockaddr *) &cli_addr);
 				return 0;
 			case -1: // error

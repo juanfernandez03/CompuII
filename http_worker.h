@@ -30,17 +30,12 @@
 		char ROOT[256];
 	} datos; 
 
-	typedef struct Mi_Tipo_Mensaje
+	typedef struct Req
 	{
-		long Id_Mensaje;
-				int Pid;
-		char Mensaje[100];
-	} msj;
-	typedef struct Mensaje
-	{
-		long Id_Mensaje;
-		char Mensaje[100];
-	} mensa;
+	  int pid;
+	  char data[4096];
+	} Req;
+
 	
 	void http_worker(int sd_conn,void *addr);
 	char *command(char *com);
