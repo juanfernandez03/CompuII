@@ -1,5 +1,5 @@
 #include "http_worker.h"
-
+#include "func.h"
 int ipv4(){
 
 		int sd;
@@ -7,7 +7,7 @@ int ipv4(){
 		struct sockaddr_in srv_addr;
 		strncpy(d_con.ROOT,"www/",4);			
 		printf("Mi directorio ROOT es y el protocolo ipv4: %s\n",d_con.ROOT);
-		d_con.PORT=3490;	
+		d_con.PORT=PUERTOI;	
 	
 		sd = socket(PF_INET, SOCK_STREAM,0);		 //creo el socket
 		setsockopt(sd,SOL_SOCKET,SO_REUSEADDR,&opt,optlen); //to avoid "Address already in use"(EADDRINUSE)

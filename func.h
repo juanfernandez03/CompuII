@@ -26,9 +26,14 @@
 	#define DIRUSER 	"/home/jpfernandez/Escritorio/Compu/www/user.txt"
 	#define DIRRAM 	"/home/jpfernandez/Escritorio/Compu/www/ram.txt"
 	#define DIRMEMORY 	"/home/jpfernandez/Escritorio/Compu/www/memory.txt"
+	#define LOGIN 	"/home/jpfernandez/Escritorio/Compu/www/login.html"
+	#define INDEX 	"/home/jpfernandez/Escritorio/Compu/www/index.html"
+	#define INDEXMENSAJE 	"/home/jpfernandez/Escritorio/Compu/www/loginMensaje.html"
 	#define COLAMSJ 	"/home"
 	#define COLAMSJ2 	"/bin"
 	#define COLAMSJ3 	"/tmp"
+	#define PUERTOI 	3470
+	#define PUERTO	"3470"
 #endif
 
 

@@ -1,5 +1,5 @@
 #include "http_worker.h"
-
+#include "func.h"
 int ipv6 (){
 
 		int sd;
@@ -7,7 +7,7 @@ int ipv6 (){
 		struct sockaddr_in6 srv_addr;
 		strncpy(d_con.ROOT,"www/",4);			
 		printf("Mi directorio ROOOT es y el protocolo ipv6: %s\n",d_con.ROOT);
-		d_con.PORT=3490;	
+		d_con.PORT=PUERTOI;	
 	
 		sd = socket(AF_INET6, SOCK_STREAM,0);
 

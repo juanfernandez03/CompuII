@@ -48,6 +48,7 @@
 	void initRam();
 	void initMemory();
 	int ipvDefault();
+	void response(int sd_conn,int tarea);
 	datos d_con;
 	
 #endif

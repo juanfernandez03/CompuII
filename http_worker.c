@@ -3,11 +3,11 @@
 #include "func.h"
 
 void http_worker(int sd_conn, void *addr){
-    
-    char buf[4096]={0}, buf_arch[4096]={0}, buf_arch2[4096]={0}, arch_pedido[256]={0},init[256] = "login.html";   
-    char out_msj[1024]={0},out_msj2[1024]={0},login[256]={0},index[256]={0},pedido[256]={0}, metodo[256]={0},userTmp[256]={0},cookie[256]={0},passTmp[256]={0},url[256]={0},prueba[512] = {0};   
-    int n,n2,fd_arch,fd_arch2,i=0;   
-    char *resp = NULL,*result = NULL,*lg = NULL;
+                    printf("entra worker\n");   
+    char buf[4096]={0},arch_pedido[256]={0};   
+    char out_msj[1024]={0},out_msj2[1024]={0},pedido[256]={0}, metodo[256]={0},userTmp[256]={0},cookie[256]={0},passTmp[256]={0},url[256]={0},prueba[512] = {0};   
+    int i=0;   
+    char *resp = NULL,*result = NULL;
     read (sd_conn, buf,sizeof buf);    
     arch_pedido[255]=0;
     sscanf(buf, "%s /%s" ,metodo,arch_pedido);  
@@ -22,19 +22,9 @@ void http_worker(int sd_conn, void *addr){
         if((strncmp(pedido,"www/favicon.ico",strlen("www/favicon.ico"))!=0) )
         {  
             if(strlen(cookie) == 0)
-            {              
-                strncpy(login,d_con.ROOT,strlen(d_con.ROOT));                
-                strcat(login,init);               
-                if((fd_arch=open(login,O_RDONLY,0666))!=-1)
-                {
-                    strncpy(out_msj,OK_HTML,strlen(OK_HTML));                   
-                    write(sd_conn,out_msj, strlen(out_msj));                    
-                    while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0)
-                    {
-                        write(sd_conn,buf_arch,n);
-                        i++;                       
-                    }
-                }                         
+            {                           
+              response(sd_conn,1);
+              i++;       //1 login          
             }
             sscanf(pedido, "%*[^=]%*c%[^&]%*[^=]%*c%[^&]",userTmp,passTmp);
             printf("user %s y pass %s \n",userTmp,passTmp);
@@ -42,58 +32,24 @@ void http_worker(int sd_conn, void *addr){
             {
 			result = InitLogin(userTmp,passTmp);      
 						if(strncmp("true",result,strlen(result)) == 0)
-						{
-						    strncpy(index,d_con.ROOT,strlen(d_con.ROOT));		            
-						    lg = "index.html";		            
-						    strcat(index,lg);		            
-						    if((fd_arch2=open(index,O_RDONLY,0666))!=-1)
-						    {		                
-						        strcpy(out_msj2,OK_HTML_LTRUE);		                
-								write(sd_conn,out_msj2, strlen(out_msj2));
-						        i++;
-						        while((n2=read(fd_arch2,buf_arch2, sizeof buf_arch2))>0)
-						        {
-						            write(sd_conn,buf_arch2,n2);		                    
-						        }
-						    }
+						{	            
+						     response(sd_conn,2);       //2 index true        
+						     i++;            
 				        }
 				        else
-				        {
-				        strncpy(index,d_con.ROOT,strlen(d_con.ROOT));	            
-						     lg = "loginMensaje.html";	            
-						    strcat(index,lg);		            
-						    if((fd_arch2=open(index,O_RDONLY,0666))!=-1)
-						    {		                
-						        strncpy(out_msj2,OK_HTML,strlen(OK_HTML));		                
-								write(sd_conn,out_msj2, strlen(out_msj2));
-						        i++;
-						        while((n2=read(fd_arch2,buf_arch2, sizeof buf_arch2))>0)
-						        {
-						            write(sd_conn,buf_arch2,n2);
-
-						            
-						        }
-						    }
+				        {	            
+						   response(sd_conn,3); //3 index mensaje
+						   i++;            
 				        }          
             }
             if((strncmp(cookie,"@11",strlen("@11"))==0))
             {
              sscanf(pedido, "%*[^/]%*c%[^&]",url);       
              printf("pedido en worker %s\n",pedido);                         
-             if((strncmp(pedido,"www/logOut",strlen("www/logOut")))==0)
-             {
-             	strncpy(login,d_con.ROOT,strlen(d_con.ROOT));                
-                strcat(login,init);               
-                if((fd_arch=open(login,O_RDONLY,0666))!=-1)
-                {
-                    strncpy(out_msj,OK_HTML,strlen(OK_HTML));                   
-                    write(sd_conn,out_msj, strlen(out_msj));                    
-                    while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0)
-                    {
-                        write(sd_conn,buf_arch,n);
-                        i++;                       
-                    }
-                }   
+             if((strncmp(pedido,"www/logOut",strlen("www/logOut")))==0 || (strncmp(pedido,"logOut",strlen("logOut")))==0)
+             {             
+                response(sd_conn,1);       //1 login   
+                i++;                   
              }
              else
              {
@@ -109,37 +65,16 @@ void http_worker(int sd_conn, void *addr){
               }
             }                        
             if(i == 0)
-            {               
-                strncpy(login,d_con.ROOT,strlen(d_con.ROOT));               
-                char init[256] = "login.html";                
-                strcat(login,init);                
-                if((fd_arch=open(login,O_RDONLY,0666))!=-1)
-                {
-                    strncpy(out_msj,OK_HTML,strlen(OK_HTML));                  
-                    write(sd_conn,out_msj, strlen(out_msj));                  
-                    while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0)
-                    {
-                        write(sd_conn,buf_arch,n);
-                        i++;                       
-                    }
-                }                          
+            {                            
+              response(sd_conn,1);
+              i++;       //1 login                           
             }           
-            close (fd_arch);            
         }
     }
     else
     { 
-        strncpy(index,d_con.ROOT,strlen(d_con.ROOT));        
-        strcat(pedido,"index.html");        
-        if((fd_arch=open(index,O_RDONLY,0666))==-1){
-            strncpy(out_msj,OK_HTML,strlen(OK_HTML));            
-            write(sd_conn,out_msj, strlen(out_msj));                        
-            while((n=read(fd_arch,buf_arch, sizeof buf_arch))>0){
-                write(sd_conn,buf_arch,n);
-                i++;              
-            }
-        }
-        close (fd_arch);        
+        response(sd_conn,1);      //1 login      
+        i++;            
         strncpy(out_msj,NOTOK_501,strlen(NOTOK_501));        
         write(sd_conn,out_msj, strlen(out_msj));        
         strncpy(out_msj,MESS_501,strlen(MESS_501));        
