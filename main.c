@@ -64,17 +64,14 @@ int main(int argc, char * const *argv){
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
-			printf("antes");
 				initMemory();
 				initRam();
-							printf("despues");
 				http_worker(sd_conn, (struct sockaddr *) &cli_addr);
 				return 0;
 			case -1: // error
 				break;
 			default: // padre	
 			//jode el favicon pasa 2 veces
-						printf("antes default");
 			switch(protocolo) {
 			
 				case 4: {
@@ -100,10 +97,8 @@ int main(int argc, char * const *argv){
 			}
 			else
 				printf("se envio %s \n",buffer);
-										printf("despues defa");
 				break;
 		}
-								printf("antes de close");
 		close(sd_conn);
 	}
 	close(sd);
