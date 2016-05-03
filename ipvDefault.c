@@ -4,7 +4,9 @@ int ipvDefault(){
   struct addrinfo hints, *servinfo, *p;
   int sockfd;  
   int rv;
-  memset (&hints, 0, sizeof (hints));
+  bzero(&hints,sizeof(struct addrinfo));
+
+  //memset (&hints, 0, sizeof (hints));
   hints.ai_family = PF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE; // use my IP address
@@ -22,13 +24,15 @@ int ipvDefault(){
 		    perror("socket");
 		    continue;
 		}
+		int opt = 1, optlen = sizeof(opt);
+		setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&opt,optlen); //to avoid "Address already in use"(EADDRINUSE)
 
 		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
 		    close(sockfd);
 		    perror("bind");
 		    continue;
 		}
-
+		
 		break; // if we get here, we must have connected successfully
 	}
 
@@ -37,6 +41,11 @@ int ipvDefault(){
 		printf( "failed to bind socket\n");
 		return -1;
 	}
+		int opt = 1, optlen = sizeof(opt);
+		setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&opt,optlen); //to avoid "Address already in use"(EADDRINUSE)
+	//int enable = 1;
+//if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+   // perror("setsockopt(SO_REUSEADDR) failed");
 printf("socket default %d \n",sockfd);
 freeaddrinfo(servinfo);
   /*

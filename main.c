@@ -2,8 +2,8 @@
 #include "http_worker.h"
 #include "func.h"
 int main(int argc, char * const *argv){
-	socklen_t addrlen;
 	struct sockaddr_in cli_addr;
+	socklen_t addrlen = sizeof cli_addr;
 	int sd, sd_conn;
 	int opcion = 4;
 	int protocolo = 0;
@@ -54,22 +54,29 @@ int main(int argc, char * const *argv){
 			break;
 	} 
 	printf("sd %d \n",sd);
-	listen(sd,CONCUR); 		//"n" incoming connections 
+	if (listen(sd,CONCUR) < 0){
+	perror("Error en listen (getaddrinfo)");
+	return -1;
+	}
 	signal(SIGCHLD,SIG_IGN);
 	hilo(ipAddress);			
 	
 	while( (sd_conn = accept(sd, (struct sockaddr *) &cli_addr, &addrlen)) > 0) {
 		switch (fork()) {
 			case 0: // hijo
+			printf("antes");
 				initMemory();
 				initRam();
+							printf("despues");
 				http_worker(sd_conn, (struct sockaddr *) &cli_addr);
 				return 0;
 			case -1: // error
 				break;
 			default: // padre	
 			//jode el favicon pasa 2 veces
+						printf("antes default");
 			switch(protocolo) {
+			
 				case 4: {
 					inet_ntop(AF_INET, &(cli_addr.sin_addr), ipAddress, INET_ADDRSTRLEN);
 					break;
@@ -93,13 +100,14 @@ int main(int argc, char * const *argv){
 			}
 			else
 				printf("se envio %s \n",buffer);
-			
+										printf("despues defa");
 				break;
 		}
+								printf("antes de close");
 		close(sd_conn);
 	}
 	close(sd);
-	perror("acept ()");
+	perror("accept");
 	return 0;
 }
 

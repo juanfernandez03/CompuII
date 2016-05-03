@@ -33,7 +33,7 @@
 	#define COLAMSJ2 	"/bin"
 	#define COLAMSJ3 	"/tmp"
 	#define PUERTOI 	3470
-	#define PUERTO	"3470"
+	#define PUERTO	"3485"
 #endif
 
 

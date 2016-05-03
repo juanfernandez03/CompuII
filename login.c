@@ -38,7 +38,7 @@ char *InitLogin(char *userTmp,char *passTmp)
 			i++;
 			printf("Pd: %d \n",pid);                         
 			mq_send (msjvuelta, (const char *) &buf, sizeof(buf), prioridad);
-	if(n<0)
+		if(n<0)
 			if(i>10)
 			return "false";  
 		}                        

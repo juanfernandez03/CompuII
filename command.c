@@ -6,7 +6,7 @@ char *command(char * pedido)
 	//printf("pedido en command %s\n",pedido);
 
 	int fd = 0;
-	if(strncmp("www/ram",pedido,strlen(pedido)) == 0)
+	if(strncmp("ram",pedido,strlen(pedido)) == 0 ||strncmp("www/ram",pedido,strlen(pedido)) == 0)
 	{
 		printf("ram \n");
 		fd = open(DIRRAM, O_RDONLY);	
